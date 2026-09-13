@@ -20,7 +20,7 @@ export interface OnboardingData {
 }
 
 export function OnboardingFlow() {
-  const { setHasCompletedOnboarding, userRole } = useApp();
+  const { setHasCompletedOnboarding, userRole, setUserProfile } = useApp();
   const [currentStep, setCurrentStep] = useState(1);
   const [data, setData] = useState<OnboardingData>({
     role: userRole,
@@ -37,6 +37,15 @@ export function OnboardingFlow() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
   
   const finishOnboarding = () => {
+    setUserProfile({
+      designation: data.designation,
+      department: data.department,
+      responsibilities: data.responsibilities,
+      challenges: data.challenges,
+      topics: data.topics,
+      learningModality: data.learningModality,
+      hasUploadedEvidence: data.hasUploadedEvidence
+    });
     setHasCompletedOnboarding(true);
   };
 

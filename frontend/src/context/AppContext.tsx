@@ -10,6 +10,16 @@ export type PageId =
 
 export type UserRole = 'ROLE_LEARNER' | 'ROLE_ADMIN' | 'ROLE_INSTRUCTOR';
 
+export interface UserProfile {
+  designation: string;
+  department: string;
+  responsibilities: string;
+  challenges: string;
+  topics: string;
+  learningModality: string;
+  hasUploadedEvidence: boolean;
+}
+
 interface AppContextType {
   currentPage: PageId;
   setCurrentPage: (page: PageId) => void;
@@ -22,6 +32,8 @@ interface AppContextType {
   setIsAuthenticated: (auth: boolean) => void;
   hasCompletedOnboarding: boolean;
   setHasCompletedOnboarding: (val: boolean) => void;
+  userProfile: UserProfile | null;
+  setUserProfile: (profile: UserProfile | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -40,9 +52,26 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
     return localStorage.getItem('karmatute_onboarding') === 'true';
   });
 
+  const [userProfileState, setUserProfileState] = useState<UserProfile | null>(() => {
+    const saved = localStorage.getItem('karmatute_profile');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return null;
+  });
+
   const setHasCompletedOnboarding = (val: boolean) => {
     localStorage.setItem('karmatute_onboarding', val ? 'true' : 'false');
     setHasCompletedOnboardingState(val);
+  };
+
+  const setUserProfile = (profile: UserProfile | null) => {
+    if (profile) {
+      localStorage.setItem('karmatute_profile', JSON.stringify(profile));
+    } else {
+      localStorage.removeItem('karmatute_profile');
+    }
+    setUserProfileState(profile);
   };
 
   const isAdmin = userRole === 'ROLE_ADMIN';
@@ -64,6 +93,8 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
         },
         hasCompletedOnboarding,
         setHasCompletedOnboarding,
+        userProfile: userProfileState,
+        setUserProfile,
       }}
     >
       {children}

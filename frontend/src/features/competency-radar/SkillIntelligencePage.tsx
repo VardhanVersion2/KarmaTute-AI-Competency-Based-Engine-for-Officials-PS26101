@@ -3,6 +3,7 @@ import { PageTutorialModal } from '../../components/ui/PageTutorialModal';
 import { GlassCore, type CoreState } from '../../components/glass-core/GlassCore';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../context/ToastContext';
+import { useApp } from '../../context/AppContext';
 import { RefreshCw, Target, Activity, ShieldCheck, ChevronRight, Layers, Award } from 'lucide-react';
 import { getCompetencySnapshots, type CompetencySnapshot } from '../../services/evidenceApi';
 
@@ -103,6 +104,7 @@ const DEFAULT_COMPETENCIES: CompetencyView[] = [
 
 export function SkillIntelligencePage() {
   const toast = useToast();
+  const { userProfile } = useApp();
   const [competencies, setCompetencies] = useState<CompetencyView[]>(DEFAULT_COMPETENCIES);
   const [selectedComp, setSelectedComp] = useState<CompetencyView | null>(null);
   const [coreState, setCoreState] = useState<CoreState>('idle');
@@ -328,7 +330,7 @@ export function SkillIntelligencePage() {
                       <Award size={16} className="text-gov-accent" /> Why this target?
                     </h3>
                     <div className="bg-gov-surface-muted border border-gov-border rounded-sm p-5 text-sm text-gov-text-primary leading-relaxed font-medium">
-                      The target level of <strong>{selectedComp.latest.targetLevel.toFixed(1)}</strong> is mandated for the <i>Statistical Officer</i> assignment under the current operational framework. 
+                      The target level of <strong>{selectedComp.latest.targetLevel.toFixed(1)}</strong> is mandated for the <i>{userProfile?.designation || 'Statistical Officer'}</i> assignment under the current operational framework. 
                       Your verified capability is currently <strong>{selectedComp.latest.currentLevel.toFixed(1)}</strong>. 
                       Closing this gap of {selectedComp.latest.gap.toFixed(1)} is necessary for certification eligibility and workflow clearance.
                     </div>

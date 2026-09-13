@@ -66,7 +66,7 @@ const DEFAULT_COMMAND_CENTER_DATA: CommandCenterData = {
 };
 
 export function CommandCenterPage() {
-  const { setCurrentPage } = useApp();
+  const { setCurrentPage, userProfile } = useApp();
   const toast = useToast();
 
   const [data, setData] = useState<CommandCenterData>(DEFAULT_COMMAND_CENTER_DATA);
@@ -165,7 +165,7 @@ export function CommandCenterPage() {
                 <div className="flex flex-col min-w-0">
                    <h1 className="text-xl font-extrabold text-gov-primary tracking-tight leading-tight truncate">{data.userContext?.fullName || 'Demo Officer'}</h1>
                    <span className="text-xs text-gov-text-secondary font-medium mt-1 truncate">
-                     {data.userContext?.designation} · {data.userContext?.department}
+                     {userProfile?.designation || data.userContext?.designation} · {userProfile?.department || data.userContext?.department}
                    </span>
                 </div>
              </div>
@@ -242,8 +242,18 @@ export function CommandCenterPage() {
               
               <div className="bg-gov-surface-muted border-l-[3px] border-l-gov-warning p-4 w-full mb-6 text-sm text-gov-text-primary rounded-r">
                 <p className="font-medium leading-relaxed">
-                  <strong>Why this?</strong> {nextAction?.whyThis || 'You need this skill for your current role. Completing this task will close your gap and boost your readiness.'}
+                  <strong>Why this?</strong> {userProfile?.challenges ? `Based on your stated challenge: "${userProfile.challenges}", this task will directly close your competency gap and boost your operational readiness.` : (nextAction?.whyThis || 'You need this skill for your current role. Completing this task will close your gap and boost your readiness.')}
                 </p>
+                {userProfile?.topics && (
+                  <p className="mt-2 text-xs text-gov-text-secondary">
+                    <strong>Aligns with your interests:</strong> {userProfile.topics}
+                  </p>
+                )}
+                {userProfile?.learningModality && (
+                  <p className="mt-1 text-xs text-gov-text-secondary">
+                    <strong>Format:</strong> Adjusted for your preferred modality ({userProfile.learningModality}).
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
