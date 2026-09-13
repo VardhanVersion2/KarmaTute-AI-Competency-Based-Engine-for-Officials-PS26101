@@ -30,7 +30,9 @@ export interface CompetencySnapshot {
   timestamp: string;
 }
 
-const API = '/api/evidence';
+import { API_BASE_URL } from './apiConfig';
+
+const API = `${API_BASE_URL}/api/evidence`;
 
 async function api<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {

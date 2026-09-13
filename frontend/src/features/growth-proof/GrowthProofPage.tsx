@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../../services/apiConfig';
 import { PageTutorialModal } from '../../components/ui/PageTutorialModal';
 import { GlassCore, type CoreState } from '../../components/glass-core/GlassCore';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/ui/Table';
@@ -37,7 +38,7 @@ export function GrowthProofPage() {
       
       // Fetch certificates from the actual endpoint if wired up, else mock for UI completeness
       try {
-        const certRes = await fetch(`http://localhost:8080/api/certificate/user/${DEMO_USER_ID}`);
+        const certRes = await fetch(`${API_BASE_URL}/api/certificate/user/${DEMO_USER_ID}`);
         if(certRes.ok) {
            const certs = await certRes.json();
            setCertificates(certs);

@@ -65,11 +65,13 @@ export interface CommandCenterData {
   progress?: ProgressData;
 }
 
+import { API_BASE_URL } from './apiConfig';
+
 export async function fetchCommandCenterData(stateOverride?: string): Promise<CommandCenterData> {
   const queryParam = stateOverride && stateOverride !== 'live' ? '?state=' + encodeURIComponent(stateOverride) : '';
   const endpoints = [
+    `${API_BASE_URL}/me/command-center${queryParam}`,
     '/me/command-center' + queryParam,
-    'http://localhost:8080/me/command-center' + queryParam,
     '/api/v1/me/command-center' + queryParam,
   ];
 

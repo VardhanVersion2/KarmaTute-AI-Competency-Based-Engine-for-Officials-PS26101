@@ -4,6 +4,8 @@ import { Button } from '../../components/ui/Button';
 import { useToast } from '../../context/ToastContext';
 import { Database, RefreshCw, Users, ShieldAlert, BarChart3, Target, Activity } from 'lucide-react';
 
+import { API_BASE_URL } from '../../services/apiConfig';
+
 export function AdminPage() {
   const toast = useToast();
   const [data, setData] = useState<any>(null);
@@ -12,7 +14,7 @@ export function AdminPage() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/admin/workforce-overview');
+      const response = await fetch(`${API_BASE_URL}/api/admin/workforce-overview`);
       if (response.ok) {
         const json = await response.json();
         setData(json);

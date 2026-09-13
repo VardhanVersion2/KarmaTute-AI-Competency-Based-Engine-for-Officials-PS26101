@@ -20,7 +20,9 @@ export interface SubmitOCRRequest {
     simulatedConfidence: number;
 }
 
-const API_BASE = '/api/execution-lab';
+import { API_BASE_URL } from './apiConfig';
+
+const API_BASE = `${API_BASE_URL}/api/execution-lab`;
 
 export async function fetchAssessments(): Promise<Assessment[]> {
     const res = await fetch(`${API_BASE}/assessments`);
