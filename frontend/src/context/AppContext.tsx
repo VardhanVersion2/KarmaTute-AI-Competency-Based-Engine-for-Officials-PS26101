@@ -20,6 +20,8 @@ interface AppContextType {
   setSoundEnabled: (enabled: boolean) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (auth: boolean) => void;
+  hasCompletedOnboarding: boolean;
+  setHasCompletedOnboarding: (val: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -33,6 +35,15 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem('karmatute_auth') === 'true';
   });
+
+  const [hasCompletedOnboarding, setHasCompletedOnboardingState] = useState<boolean>(() => {
+    return localStorage.getItem('karmatute_onboarding') === 'true';
+  });
+
+  const setHasCompletedOnboarding = (val: boolean) => {
+    localStorage.setItem('karmatute_onboarding', val ? 'true' : 'false');
+    setHasCompletedOnboardingState(val);
+  };
 
   const isAdmin = userRole === 'ROLE_ADMIN';
 
@@ -51,6 +62,8 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
           localStorage.setItem('karmatute_auth', val ? 'true' : 'false');
           setIsAuthenticated(val);
         },
+        hasCompletedOnboarding,
+        setHasCompletedOnboarding,
       }}
     >
       {children}

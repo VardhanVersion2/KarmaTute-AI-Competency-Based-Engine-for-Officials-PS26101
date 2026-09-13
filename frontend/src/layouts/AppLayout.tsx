@@ -25,6 +25,7 @@ import { GrowthProofPage } from '../features/growth-proof/GrowthProofPage';
 import { AdminPage } from '../features/admin/AdminPage';
 import { DataChamberPage } from '../features/data-chamber/DataChamberPage';
 import { LoginPage } from '../features/auth/LoginPage';
+import { OnboardingFlow } from '../features/onboarding/OnboardingFlow';
 import { KarmaVaaniAssistant } from '../components/assistant/KarmaVaaniAssistant';
 
 // Global Splash Screen Component with Animated Progress Bar & Low-Net Safety
@@ -108,7 +109,7 @@ function GlobalLoader({ onComplete }: { onComplete: () => void }) {
 }
 
 export function AppLayout() {
-  const { currentPage, setCurrentPage, userRole, setUserRole, isAdmin, soundEnabled, setSoundEnabled, isAuthenticated, setIsAuthenticated } = useApp();
+  const { currentPage, setCurrentPage, userRole, setUserRole, isAdmin, soundEnabled, setSoundEnabled, isAuthenticated, setIsAuthenticated, hasCompletedOnboarding } = useApp();
   const toast = useToast();
   const [appReady, setAppReady] = useState(false);
 
@@ -146,6 +147,8 @@ export function AppLayout() {
       <div className={`min-h-screen bg-gov-bg text-gov-text-primary font-sans antialiased selection:bg-gov-accent/30 flex flex-col transition-opacity duration-500 ${appReady ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`}>
         {!isAuthenticated ? (
           <LoginPage />
+        ) : !hasCompletedOnboarding ? (
+          <OnboardingFlow />
         ) : (
           <>
         <SkipLink targetId="main-content" />
